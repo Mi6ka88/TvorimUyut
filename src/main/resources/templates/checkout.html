@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #1abc9c;
+            --text-color: #333;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f9f9f9;
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-top: 80px;
+        }
+
+        header {
+            background: linear-gradient(rgba(44, 62, 80, 0.95), rgba(44, 62, 80, 0.95));
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            color: white;
+            font-size: 2rem;
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-right: auto; /* Добавляем это свойство */
+            margin-left: 40px; /* Отступ от логотипа */
+        }
+
+        .header-right a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .header-right a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--secondary-color);
+            bottom: -5px;
+            left: 0;
+            transition: var(--transition);
+        }
+
+        .header-right a:hover::after {
+            width: 100%;
+        }
+
+        .checkout-page {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .checkout-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .checkout-container h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+    /*    .checkout-container h2::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 3px;
+            background: var(--secondary-color);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }*/
+        .checkout-container h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%; /* Линия на всю ширину контейнера */
+            height: 3px;
+            background: var(--secondary-color);
+            background: linear-gradient(90deg, #1abc9c, #2c3e50);
+            border-radius: 2px;
+        }
+
+        #product-details {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .product-image {
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin: 1rem auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .checkout-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 8px rgba(26, 188, 156, 0.2);
+        }
+
+        .submit-order-btn {
+            background: var(--secondary-color);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            grid-column: 1 / -1;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(26, 188, 156, 0.3);
+        }
+
+        .submit-order-btn:hover {
+            background: #16a085;
+            transform: translateY(-2px);
+        }
+
+        .submit-order-btn:active {
+            transform: translateY(0);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-form {
+                grid-template-columns: 1fr;
+            }
+
+            .checkout-container {
+                padding: 2rem;
+            }
+
+            .product-image {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .checkout-page {
+                padding: 0 1rem;
+            }
+
+            .checkout-container {
+                padding: 1.5rem;
+            }
+
+            .checkout-container h2 {
+                font-size: 1.8rem;
+            }
+
+            .product-image {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-left">
+        <h1>Творим уют</h1>
+    </div>
+    <div class="header-right">
+        <a href="/">Главная</a>
+        <a href="/about-us">О нас</a>
+    </div>
+</header>
+
+<main class="checkout-page">
+    <div class="checkout-container">
+        <h2>Оформление заказа</h2>
+        <div id="product-details">
+        </div>
+        <form id="order-form" class="checkout-form">
+            <input type="hidden" id="productId" name="product.id" value="">
+
+            <div class="form-group">
+                <label for="name">Имя:</label>
+                <div class="input-wrapper">
+                    <input type="text" id="name" name="name" required>
+                    <i class="fas fa-user input-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="surname">Фамилия:</label>
+                <div class="input-wrapper">
+                    <input type="text" id="surname" name="surname" required>
+                    <i class="fas fa-user-tag input-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <div class="input-wrapper">
+                    <input type="email" id="email" name="email" required>
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Телефон:</label>
+                <div class="input-wrapper">
+                    <input type="tel" id="phone" name="phone" required>
+                    <i class="fas fa-phone input-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="address">Адрес доставки:</label>
+                <textarea id="address" name="address" rows="4" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-order-btn">
+                <i class="fas fa-paper-plane"></i>
+                Отправить заказ
+            </button>
+        </form>
+    </div>
+</main>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('productId');
+    console.log('Product ID:', productId);
+    document.getElementById('productId').value = productId;
+
+    fetch(`/product/api/${productId}`)
+        .then(response => {
+            console.log('Response:', response);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(product => {
+            console.log('Product Data:', product);
+
+            const productDetails = document.getElementById('product-details');
+            if (product.name && product.price) {
+                productDetails.innerHTML = `
+                    <h3>${product.name}</h3>
+                    <img src="${product.imageUrl}" alt="${product.name}" class="product-image">
+                    <p style="display: none;">${product.description}</p>
+                    <p style="font-size: 18px; font-weight: bold;">Цена: ${product.price} руб.</p>
+                `;
+            } else {
+                productDetails.innerHTML = `
+                    <p>Ошибка: информация о товаре не найдена.</p>
+                `;
+                console.error('Данные о товаре не найдены:', product);
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при загрузке информации о товаре:', error);
+            document.getElementById('product-details').innerHTML = `
+                <p>Ошибка при загрузке информации о товаре. Попробуйте еще раз позже.</p>
+            `;
+        });
+
+    // Обработка отправки формы
+    document.getElementById('order-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const orderData = Object.fromEntries(formData);
+        orderData.product = { id: productId };
+
+        fetch('/api/order', {
+            method: 'POST',
+            body: JSON.stringify(orderData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Спасибо за заказ. Наши менеджера свяжутся с вами в ближайшее время.');
+                    window.location.href = '/';
+                } else {
+                    response.json().then(data => {
+                        alert('Ошибка при оформлении заказа: ' + data.message);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка при отправке заказа:', error);
+                alert('Ошибка при отправке заказа. Попробуйте еще раз позже.');
+            });
+    });
+</script>
+
+<style>
+
+    .loading-spinner {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+    }
+
+    .fa-spinner {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .product-header {
+        margin-bottom: 2rem;
+    }
+
+    .product-title {
+        font-size: 1.8rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .product-price {
+        font-size: 1.4rem;
+        color: var(--secondary-color);
+        font-weight: 700;
+        margin-top: 1rem;
+    }
+
+    .error-message {
+        color: #e74c3c;
+        text-align: center;
+        padding: 2rem;
+        border: 2px solid #e74c3c;
+        border-radius: 8px;
+        margin: 2rem 0;
+    }
+
+    .error-alert {
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .error-alert h2 {
+        color: #e74c3c;
+    }
+
+    .back-btn {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.8rem 1.5rem;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+</style>
+</body>
+</html>

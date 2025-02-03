@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Творим уют - О нас</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.9)),
+            url('https://images.unsplash.com/photo-1600585154526-990dced4db0d') center/cover;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .content-section {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .about-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.6s all ease;
+        }
+
+        .about-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .about-card h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 2.2rem;
+        }
+
+        .about-card p {
+            line-height: 1.8;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .team-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .team-member {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+
+        .team-member img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-bottom: 3px solid #2c3e50;
+        }
+
+        .member-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .member-info h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .stats-section {
+            background: #2c3e50;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.6s all ease;
+        }
+
+        .stat-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+<section class="hero-section">
+    <div class="hero-content">
+        <h1>Мы создаём уют</h1>
+        <p>Более 10 лет дарим комфорт вашим домам</p>
+    </div>
+</section>
+
+<div class="content-section">
+    <div class="about-card">
+        <h2>Наша история</h2>
+        <p>Начав с небольшой мастерской в 2010 году, сегодня мы стали лидерами в создании уютных интерьеров.
+            Каждый наш проект - это сочетание инновационных технологий и многовековых традиций мастерства.</p>
+    </div>
+
+    <div class="about-card">
+        <h2>Наша философия</h2>
+        <p>Мы верим, что настоящий уют рождается из гармонии между функциональностью и эстетикой.
+            Наши дизайнеры работают над каждым проектом, вкладывая душу и учитывая малейшие пожелания клиентов.</p>
+    </div>
+
+    <div class="team-section">
+        <div class="team-member">
+            <img src="/images/about-us/ryanGosling.png" alt="Дизайнер">
+            <div class="member-info">
+                <h3>Алексей Петров</h3>
+                <p>Главный дизайнер</p>
+            </div>
+        </div>
+        <div class="team-member">
+            <img src="/images/about-us/TaylerDerdan.png" alt="Менеджер">
+            <div class="member-info">
+                <h3>Влад Кучеренко</h3>
+                <p>Менеджер проектов</p>
+            </div>
+        </div>
+        <div class="team-member">
+            <img src="/images/about-us/tomasShelby.png" alt="Архитектор">
+            <div class="member-info">
+                <h3>Дмитрий Сидоров</h3>
+                <p>Архитектор</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="stats-section">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-number" data-count="1500">0</div>
+            <p>Реализованных проектов</p>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-count="12">0</div>
+            <p>Лет опыта</p>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-count="98">0</div>
+            <p>Довольных клиентов (%)</p>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Анимация при скролле
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.about-card, .stat-item').forEach((el) => {
+        observer.observe(el);
+    });
+
+    // Анимация чисел
+    const counters = document.querySelectorAll('.stat-number');
+    const speed = 200;
+
+    counters.forEach(counter => {
+        const updateCount = () => {
+            const target = +counter.getAttribute('data-count');
+            const count = +counter.innerText;
+            const inc = target / speed;
+
+            if(count < target) {
+                counter.innerText = Math.ceil(count + inc);
+                setTimeout(updateCount, 10);
+            } else {
+                counter.innerText = target;
+            }
+        }
+
+        const startCounter = (entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    updateCount();
+                    observer.unobserve(counter.parentElement);
+                }
+            });
+        }
+
+        const counterObserver = new IntersectionObserver(startCounter, { threshold: 1 });
+        counterObserver.observe(counter.parentElement);
+    });
+
+    // Плавный скролл
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+</body>
+</html>

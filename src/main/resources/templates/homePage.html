@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Творим уют - Главная</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: rgba(2, 20, 32, 0.29);
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Шапка */
+        header {
+            background: linear-gradient(rgba(44, 62, 80, 0.95), rgba(44, 62, 80, 0.95));
+            padding: 1rem 5%;
+            position: fixed;
+            width: 90%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            color: white;
+            font-size: 2rem;
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .header-left h1:hover {
+            transform: scale(1.05);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .header-right a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .header-right a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--secondary-color);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+
+        .header-right a:hover::after {
+            width: 100%;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 1.5rem;
+            color: white;
+        }
+
+        /* Герой-секция */
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+            url('/images/hero-b.png') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-top: 80px;
+        }
+
+        .hero-content h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        /* Категории */
+        .categories-section {
+            padding: 5rem 5%;
+            background: #f9f9f9;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Уменьшил минимальную ширину */
+            gap: 1.5rem; /* Уменьшил расстояние между карточками */
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Обновленные стили для карточек категорий */
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: var(--transition);
+            transform: translateY(0);
+            position: relative;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-card img {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .category-info {
+            padding: 1rem;
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        .category-info h3 {
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .category-card:hover .category-info h3 {
+            color: var(--secondary-color);
+        }
+
+        /* Эффект нажатия */
+        .category-card:active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Адаптивные стили */
+        @media (max-width: 768px) {
+            .category-card {
+                margin: 0 auto;
+                max-width: 300px;
+            }
+
+            .category-card img {
+                height: 150px;
+            }
+        }
+
+        .category-info {
+            padding: 1rem; /* Уменьшил внутренние отступы */
+            color: var(--primary-color);
+
+        }
+
+        .category-info h3 {
+            font-size: 1.1rem; /* Уменьшил размер шрифта */
+        }
+
+        /* Слайдер */
+        .slider-section {
+            padding: 4rem 5%;
+            background: var(--primary-color);
+        }
+
+        /* Футер */
+        footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 3rem 5%;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-right {
+                display: none;
+            }
+
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-left">
+        <h1>Творим уют</h1>
+    </div>
+    <div class="header-right">
+        <a href="/about-us">О нас</a>
+        <div class="contact-info">
+            <span><i class="fas fa-envelope"></i> info@tvirimUyut.ru</span>
+            <span><i class="fas fa-phone"></i> +7 (495) 602-07-07</span>
+        </div>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h2>Создаём уютные интерьеры</h2>
+        <p>Премиальная мебель для вашего дома</p>
+    </div>
+</section>
+
+<!-- В разделе categories-section -->
+<section class="categories-section">
+    <h2 class="section-title">Наши категории</h2>
+    <div class="categories-grid">
+        <div class="category-card">
+            <a href="/kitchen">
+                <img src="/images/category/tablekithen.jpg" alt="Кухни">
+                <div class="category-info">
+                    <h3>Кухни</h3>
+                </div>
+            </a>
+        </div>
+        <div class="category-card">
+            <a href="/bedroom">
+                <img src="/images/category/bad.png" alt="Спальная">
+                <div class="category-info">
+                    <h3>Спальная</h3>
+                </div>
+            </a>
+        </div>
+        <div class="category-card">
+            <a href="/livingroom">
+                <img src="/images/category/gostinaya.png" alt="Гостиная">
+                <div class="category-info">
+                    <h3>Гостиная</h3>
+                </div>
+            </a>
+        </div>
+        <div class="category-card">
+            <a href="/kidsroom">
+                <img src="/images/category/child.png" alt="Детская">
+                <div class="category-info">
+                    <h3>Детская</h3>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="slider">
+    <div class="slides">
+        <div class="slide"><img src="/images/slider/image1.png" alt="Слайд 1"></div>
+        <div class="slide"><img src="/images/slider/image2.png" alt="Слайд 2"></div>
+        <div class="slide"><img src="/images/slider/image3.png" alt="Слайд 3"></div>
+        <div class="slide"><img src="/images/slider/image4.png" alt="Слайд 4"></div>
+    </div>
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+</section>
+<script src="/js/slider.js"></script>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>Контакты</h4>
+            <p><i class="fas fa-map-marker-alt"></i> Москва, ул. Примерная, 15</p>
+            <p><i class="fas fa-phone"></i> +7 (495) 602-07-07</p>
+        </div>
+        <div class="footer-section">
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Анимации при скролле
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.category-card').forEach((el) => {
+        el.style.opacity = 0;
+        el.style.transform = 'translateY(20px)';
+        observer.observe(el);
+    });
+
+</script>
+</body>
+</html>

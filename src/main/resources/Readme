@@ -1,0 +1,441 @@
+package org.crystalkste.myshop.controller;
+
+import org.crystalkste.myshop.entity.Product;
+import org.crystalkste.myshop.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/product")
+public class ProductController {
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @PostMapping
+    public Product createProduct(@RequestBody Product product) {
+        return productRepository.save(product);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        if (productRepository.existsById(id)) {
+            productRepository.deleteById(id);
+            return "Product deleted";
+        } else {
+            return "Product not found";
+        }
+    }
+
+    @PutMapping("/{id}/category")
+    public Product updateProductCategory(@PathVariable Long id, @RequestParam String category_name) {
+        Product product = productRepository.findById(id).orElse(null);
+        if (product == null) {
+            return null; // или можно вернуть строку с сообщением "Product not found"
+        }
+        product.setCategoryName(category_name);
+        return productRepository.save(product);
+    }
+
+    @GetMapping("/{id}")
+    public Product getProductById(@PathVariable Long id) {
+        return productRepository.findById(id).orElse(null); // возвращает null, если продукт не найден
+    }
+
+    @GetMapping("/category/{categoryName}")
+    public List<Product> getProductsByCategory(@PathVariable("categoryName") String categoryName) {
+        return productRepository.findByCategoryName(categoryName);
+    }
+
+    @GetMapping("/category/{categoryName}/{id}")
+    public List<Product> getAllProductsByCategoryId(@PathVariable Long id, @PathVariable("categoryName") String categoryName) {
+        return productRepository.findByCategoryNameAndId(categoryName, id);
+    }
+}
+
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кухни</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <div class="header-left">
+        <h1>Творим уют</h1>
+    </div>
+    <div class="header-right">
+        <a href="/">Главная</a>
+        <a href="#about">О нас</a>
+        <a href="#cart">Корзина</a>
+    </div>
+</header>
+<section class="category-page">
+    <h2>Кухни</h2>
+    <div class="products">
+        <div class="product-card" th:each="product : ${kitchen}">
+            <a th:href="@{/product/{id}(id=${product.id})}">
+                <img th:src="${product.imageUrl}" alt="Изображение продукта">
+                <div class="product-info">
+                    <h3 th:text="${product.name}">Название продукта</h3>
+                    <p class="price" th:text="${product.price}">Цена продукта</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+</body>
+</html>
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4; /* Светло-серый фон */
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c3e50; /* Темно-синий цвет */
+    color: white;
+    padding: 20px;
+}
+
+.header-left h1 {
+    margin: 0;
+    font-size: 2.5em; /* Увеличиваем размер шрифта */
+}
+
+.header-right a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 1.2em; /* Увеличиваем размер шрифта */
+}
+
+.header-right a:hover {
+    text-decoration: underline;
+}
+
+.categories-section {
+    text-align: center;
+    margin: 20px;
+}
+
+.categories-section h2 {
+    color: #2c3e50; /* Темно-синий цвет */
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.categories {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.category {
+    background-color: #ffffff; /* Белый цвет */
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 20px;
+    width: 250px; /* Ширина блока категории */
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.category:hover {
+    transform: scale(1.05);
+}
+
+.category img {
+    max-width: 100%;
+    height: 200px; /* Высота изображений */
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.category h3 {
+    font-size: 1.4em;
+    margin: 10px 0;
+    color: #2c3e50; /* Темно-синий цвет */
+    position: relative;
+    display: inline-block;
+    text-decoration: none; /* Убираем стандартное подчеркивание */
+}
+
+.category h3::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px; /* Толщина линии */
+    background-color: #2c3e50; /* Темно-синий цвет */
+    left: 0;
+    bottom: -5px; /* Отступ от текста */
+}
+
+.slider {
+    position: relative;
+    max-width: 50%; /* Размер слайдера */
+    margin: 20px auto; /* Центрируем слайдер */
+    overflow: hidden;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    box-sizing: border-box;
+}
+
+.slide img {
+    width: 100%;
+    display: block;
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    user-select: none;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+}
+
+.prev {
+    left: 0;
+    border-radius: 0 3px 3px 0;
+}
+
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.category-page {
+    text-align: center;
+    margin: 20px;
+}
+
+.category-page h2 {
+    color: #2c3e50; /* Темно-синий цвет */
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.products {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px; /* Расстояние между карточками */
+}
+
+.product-card {
+    background-color: #ffffff; /* Белый цвет */
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    width: 300px; /* Ширина карточки */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px; /* Фиксированная высота изображений */
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.product-info {
+    padding: 15px;
+}
+
+.product-info h3 {
+    font-size: 1.4em;
+    color: #2c3e50; /* Темно-синий цвет */
+    margin: 10px 0;
+    position: relative;
+    display: inline-block;
+    border-bottom: none; /* Убираем верхнюю линию */
+}
+
+.product-info h3::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px; /* Толщина линии */
+    background-color: #2c3e50; /* Темно-синий цвет */
+    left: 0;
+    bottom: -5px; /* Отступ от текста */
+}
+
+.product-info p {
+    margin: 0;
+    color: #757575; /* Серый цвет для описания */
+}
+
+.price {
+    font-size: 1.2em;
+    color: #e91e63; /* Розовый цвет для цены */
+    margin-top: 10px;
+    font-weight: bold;
+}
+/* styles.css */
+
+/* Общие стили для страницы */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Стили для заголовка */
+header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .header-left h1 {
+    margin: 0;
+}
+
+header .header-right a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+header .header-right a:hover {
+    text-decoration: underline;
+}
+
+/* Стили для основной части страницы продукта */
+.product-page {
+    padding: 20px;
+}
+
+.product-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.product-image {
+    max-width: 900px;
+    height: auto;
+    border-radius: 8px;
+}
+
+.product-details {
+    max-width: 500px;
+    text-align: center;
+}
+
+.product-details h2 {
+    margin-top: 0;
+}
+
+.product-details p {
+    margin: 10px 0;
+}
+
+#product-description {
+    font-size: 20px; /* Увеличиваем размер шрифта для описания товара */
+}
+
+#product-price {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.add-to-cart-btn {
+    background-color: #2c3e50; /* Цвет фона вывески */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #1a252f; /* Более темный цвет для hover-эффекта */
+}
+.sidebar {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    width: 250px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.sidebar p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar {
+        position: static;
+        width: auto;
+        margin: 20px 0;
+    }
+}
+
