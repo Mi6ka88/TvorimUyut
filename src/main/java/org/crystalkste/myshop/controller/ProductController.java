@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/product")
 public class ProductController {
 
@@ -66,17 +66,6 @@ public class ProductController {
     public ResponseEntity<List<Product>> getAllProductsByCategoryId(@PathVariable Long id, @PathVariable("categoryName") String categoryName) {
         List<Product> products = productService.getProductsByCategoryAndId(categoryName, id);
         return ResponseEntity.ok(products);
-    }
-
-    @GetMapping("/details")
-    public String getProductDetails(@RequestParam("productId") Long productId, Model model) {
-        Product product = productService.getProductById(productId);
-        if (product != null) {
-            model.addAttribute("product", product);
-            return "product-details";
-        } else {
-            return "error";
-        }
     }
 
     // Получить продукт в формате JSON
