@@ -56,8 +56,7 @@ public class CategoryController {
         if (product != null) {
             model.addAttribute("product", product);
             return "product-details";
-        } else {
-            return "error";
         }
+        return "Error";
     }
 }
