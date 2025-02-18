@@ -28,6 +28,9 @@ public class OrderController {
         order.setProduct(product);
         order.setCategory(product.getCategoryName());
         order.setProductName(product.getName());
+        int numb = product.getCount();
+        numb = numb -1;
+        product.setCount(numb);
         return orderRepository.save(order);
     }
 
