@@ -49,7 +49,7 @@
     - `OrderController`: Оформление заказов.
     - `CategoryController`: Отображение товаров по категориям.
     - `HomeController`: Главная страница и статические страницы.
-    - 'PaymentController':  конечная точка REST API, которая делегирует выполнение запросов интерфейсу PaymentClien
+    - `PaymentController`:  конечная точка REST API, которая делегирует выполнение запросов интерфейсу PaymentClien
 
 - **Сервисы**:
     - `ProductService`: Бизнес-логика для работы с товарами.
