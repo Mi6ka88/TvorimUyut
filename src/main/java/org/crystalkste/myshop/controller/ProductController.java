@@ -4,12 +4,14 @@ import org.crystalkste.myshop.entity.Product;
 import org.crystalkste.myshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/product")
 public class ProductController {
 
     private final ProductService productService;
@@ -64,5 +66,16 @@ public class ProductController {
     public ResponseEntity<List<Product>> getAllProductsByCategoryId(@PathVariable Long id, @PathVariable("categoryName") String categoryName) {
         List<Product> products = productService.getProductsByCategoryAndId(categoryName, id);
         return ResponseEntity.ok(products);
+    }
+
+    // Получить продукт в формате JSON
+    @GetMapping("/api/{id}")
+    public ResponseEntity<Product> getProductAsJson(@PathVariable Long id) {
+        Product product = productService.getProductById(id);
+        if (product != null) {
+            return ResponseEntity.ok(product);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
