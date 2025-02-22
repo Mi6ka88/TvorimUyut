@@ -266,8 +266,7 @@
 <main class="checkout-page">
     <div class="checkout-container">
         <h2>Оформление заказа</h2>
-        <div id="product-details">
-        </div>
+        <div id="product-details"></div>
         <form id="order-form" class="checkout-form">
             <input type="hidden" id="productId" name="product.id" value="">
 
@@ -308,6 +307,33 @@
                 <textarea id="address" name="address" rows="4" required></textarea>
             </div>
 
+            <!-- Кнопки выбора оплаты -->
+            <div class="form-group full-width">
+                <label>Способ оплаты:</label>
+                <div class="payment-buttons">
+                    <button type="button" id="cash-payment" class="payment-btn active">
+                        <i class="fas fa-money-bill-wave"></i>
+                        Наличными
+                    </button>
+                    <button type="button" id="card-payment" class="payment-btn">
+                        <i class="fas fa-credit-card"></i>
+                        По карте
+                    </button>
+                </div>
+            </div>
+
+            <!-- Форма для оплаты по карте (скрыта по умолчанию) -->
+            <div id="card-payment-form" class="form-group full-width" style="display: none;">
+                <label for="card-number">Номер карты:</label>
+                <input type="text" id="card-number" name="cardNumber" placeholder="1234 5678 9012 3456">
+
+                <label for="card-expiry">Срок действия:</label>
+                <input type="text" id="card-expiry" name="cardExpiry" placeholder="MM/YY">
+
+                <label for="card-cvv">CVV:</label>
+                <input type="text" id="card-cvv" name="cardCvv" placeholder="123">
+            </div>
+
             <button type="submit" class="submit-order-btn">
                 <i class="fas fa-paper-plane"></i>
                 Отправить заказ
@@ -316,13 +342,51 @@
     </div>
 </main>
 
+<!-- Стили для кнопок оплаты -->
+<style>
+    .payment-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .payment-btn {
+        flex: 1;
+        padding: 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        background: white;
+        color: var(--primary-color);
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .payment-btn.active {
+        border-color: var(--secondary-color);
+        background: var(--secondary-color);
+        color: white;
+    }
+
+    .payment-btn:hover {
+        border-color: var(--secondary-color);
+        background: var(--secondary-color);
+        color: white;
+    }
+</style>
+
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('productId');
     console.log('Product ID:', productId);
     document.getElementById('productId').value = productId;
 
-    fetch(`/product/api/${productId}`)
+    fetch(`/api/product/${productId}`)
         .then(response => {
             console.log('Response:', response);
             if (!response.ok) {
@@ -355,95 +419,109 @@
             `;
         });
 
+    // Обработка выбора способа оплаты
+    const cashPaymentBtn = document.getElementById('cash-payment');
+    const cardPaymentBtn = document.getElementById('card-payment');
+    const cardPaymentForm = document.getElementById('card-payment-form');
+
+    cashPaymentBtn.addEventListener('click', () => {
+        cashPaymentBtn.classList.add('active');
+        cardPaymentBtn.classList.remove('active');
+        cardPaymentForm.style.display = 'none';
+    });
+
+    cardPaymentBtn.addEventListener('click', () => {
+        cardPaymentBtn.classList.add('active');
+        cashPaymentBtn.classList.remove('active');
+        cardPaymentForm.style.display = 'block';
+    });
+
     // Обработка отправки формы
     document.getElementById('order-form').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        const formData = new FormData(event.target);
-        const orderData = Object.fromEntries(formData);
-        orderData.product = { id: productId };
+        // Получаем цену товара из DOM
+        const productPriceElement = document.querySelector('#product-details p[style="font-size: 18px; font-weight: bold;"]');
+        const productPriceText = productPriceElement.textContent; // Пример: "Цена: 1000 руб."
+        const productPrice = parseFloat(productPriceText.replace(/[^0-9.]/g, '')); // Извлекаем число (1000)
 
-        fetch('/api/order', {
-            method: 'POST',
-            body: JSON.stringify(orderData),
-            headers: {
-                'Content-Type': 'application/json'
+        // Генерируем случайный ID для платежа
+        const paymentId = Math.floor(Math.random() * 1000000); // Случайное число от 0 до 999999
+
+        const paymentMethod = cashPaymentBtn.classList.contains('active') ? 'cash' : 'card';
+
+        if (paymentMethod === 'card') {
+            // Имитация оплаты по карте
+            const cardNumber = document.getElementById('card-number').value;
+            const cardExpiry = document.getElementById('card-expiry').value;
+            const cardCvv = document.getElementById('card-cvv').value;
+
+            if (!cardNumber || !cardExpiry || !cardCvv) {
+                alert('Пожалуйста, заполните все поля для оплаты по карте.');
+                return;
             }
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert('Спасибо за заказ. Наши менеджера свяжутся с вами в ближайшее время.');
-                    window.location.href = '/';
-                } else {
-                    response.json().then(data => {
-                        alert('Ошибка при оформлении заказа: ' + data.message);
-                    });
+
+            // Отправка данных на сервер для обработки оплаты
+            fetch('/api/payment', {
+                method: 'POST',
+                body: JSON.stringify({
+                    id: paymentId, // Случайно сгенерированный ID
+                    amount: productPrice, // Цена товара
+                    cardNumber,
+                    cardExpiry,
+                    cardCvv
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
                 }
             })
-            .catch(error => {
-                console.error('Ошибка при отправке заказа:', error);
-                alert('Ошибка при отправке заказа. Попробуйте еще раз позже.');
-            });
+                .then(response => {
+                    if (response.ok) {
+                        alert('Оплата прошла успешно. Ваш заказ оформлен.');
+                        window.location.href = '/';
+                    } else {
+                        response.json().then(data => {
+                            alert('Ошибка при оплате: ' + data.message);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка при оплате:', error);
+                    alert('Ошибка при оплате. Попробуйте еще раз позже.');
+                });
+        } else {
+            // Оплата наличными
+            const formData = new FormData(event.target);
+            const orderData = Object.fromEntries(formData);
+            orderData.product = { id: productId, price: productPrice }; // Добавляем цену товара
+
+            fetch('/api/order', {
+                method: 'POST',
+                body: JSON.stringify({
+                    id: paymentId, // Случайно сгенерированный ID
+                    amount: productPrice, // Цена товара
+                    orderData // Данные заказа
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Спасибо за заказ. Наши менеджеры свяжутся с вами в ближайшее время.');
+                        window.location.href = '/';
+                    } else {
+                        response.json().then(data => {
+                            alert('Ошибка при оформлении заказа: ' + data.message);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка при отправке заказа:', error);
+                    alert('Ошибка при отправке заказа. Попробуйте еще раз позже.');
+                });
+        }
     });
 </script>
-
-<style>
-
-    .loading-spinner {
-        text-align: center;
-        padding: 2rem;
-        color: #666;
-    }
-
-    .fa-spinner {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-    }
-
-    .product-header {
-        margin-bottom: 2rem;
-    }
-
-    .product-title {
-        font-size: 1.8rem;
-        color: var(--primary-color);
-        margin-bottom: 1rem;
-    }
-
-    .product-price {
-        font-size: 1.4rem;
-        color: var(--secondary-color);
-        font-weight: 700;
-        margin-top: 1rem;
-    }
-
-    .error-message {
-        color: #e74c3c;
-        text-align: center;
-        padding: 2rem;
-        border: 2px solid #e74c3c;
-        border-radius: 8px;
-        margin: 2rem 0;
-    }
-
-    .error-alert {
-        text-align: center;
-        padding: 2rem;
-    }
-
-    .error-alert h2 {
-        color: #e74c3c;
-    }
-
-    .back-btn {
-        display: inline-block;
-        margin-top: 1rem;
-        padding: 0.8rem 1.5rem;
-        background: var(--primary-color);
-        color: white;
-        border-radius: 5px;
-        text-decoration: none;
-    }
-</style>
 </body>
 </html>
