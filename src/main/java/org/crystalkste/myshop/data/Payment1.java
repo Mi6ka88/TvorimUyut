@@ -6,12 +6,12 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class Payment {
+public class Payment1 {
 
     private Long id;
     private Double amount;
 
-    public Payment(Long id, Double amount) {
+    public Payment1(Long id, Double amount) {
         this.id = id;
         this.amount = amount;
     }
